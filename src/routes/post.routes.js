@@ -1,12 +1,15 @@
 import express from "express";
 import { Post } from "../models/post.model";
+import { User } from "../models/user.model";
 const router = express.Router();
 
 // create Post
 router.post("/", async (req, res) => {
   try {
     const post = new Post(req.body);
-
+    const author = await User.findById(req.body.author);
+    if (!author) return res.status(400).send("Invalid author ID");
+    post.author = author;
     await post.save();
 
     res.send(post);
@@ -44,7 +47,7 @@ router.get("/", async (req, res) => {
 // Get a Post
 router.get("/:id", async (req, res) => {
   try {
-    const post = await Post.findOne({ id: req.params.id });
+    const post = await Post.findOne({ id: req.params.id }).populate("author");
     if (!post) return res.status(404).json(post);
     return res.send(post);
   } catch (error) {
