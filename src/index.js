@@ -1,6 +1,7 @@
 // import express
 import express from "express";
 import { connectDB } from "./db/mongo-init";
+import { PostRouter } from "./routes/post.routes";
 import { TodoRouter } from "./routes/todo.routes";
 
 // initialize express
@@ -10,6 +11,7 @@ const app = express();
 app.use(express.json());
 app.get("/", (_, res) => res.send("Welcome home"));
 app.use("/todo", TodoRouter);
+app.use("/post", PostRouter);
 
 // we run our server
 async function startServer() {
