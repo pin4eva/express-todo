@@ -46,6 +46,19 @@ router.put("/", async (req, res) => {
   }
 });
 
+// mark completed true
+router.put("/completed", async (req, res) => {
+  try {
+    let todo = await Todo.findById(req.body.id);
+    if (!todo) return res.status(404).send("Invalid todo id");
+    todo.completed = req.body.completed;
+    await todo.save();
+    res.send(todo);
+  } catch (error) {
+    res.json(error);
+  }
+});
+
 // delete todo
 router.delete("/:id", async (req, res) => {
   try {
