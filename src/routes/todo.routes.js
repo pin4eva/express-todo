@@ -35,7 +35,15 @@ router.get("/single/:id", async (req, res) => {
 
 // create todo
 router.post("/", async (req, res) => {
+  // throw error if task is not provided
+  if (!req.body.task) return res.status(400).send("Field task is required");
   try {
+    const task = req.body.task;
+    // check if a task with the same value already exist
+    const isTask = await Todo.findOne({ task });
+
+    // if so throw error
+    if (isTask) return res.status(400).send("Possible duplicate task");
     const todo = new Todo(req.body);
     await todo.save();
     res.send(todo);
