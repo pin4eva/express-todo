@@ -77,14 +77,27 @@ router.put("/completed", async (req, res) => {
 });
 
 // delete todo
-router.delete("/:id", async (req, res) => {
+router.delete("/delete", async (req, res) => {
   try {
-    const todo = await Todo.findById(req.params.id);
+    const todo = await Todo.findById(req.body.id);
     if (!todo) return res.status(404).send("Todo not found");
     todo.remove();
     return res.send(todo);
   } catch (error) {
     res.json(error);
+  }
+});
+
+// delete all todos
+router.delete("/delete/all", async (_, res) => {
+  try {
+    const todos = await Todo.find();
+    for (const todo of todos) {
+      todo.remove();
+    }
+    res.send(todos);
+  } catch (error) {
+    res.send(error);
   }
 });
 

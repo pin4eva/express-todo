@@ -55,9 +55,9 @@ router.get("/:id", async (req, res) => {
   }
 });
 // Delete a Post
-router.delete("/:id", async (req, res) => {
+router.delete("/delete", async (req, res) => {
   try {
-    const post = await Post.findById(req.params.id);
+    const post = await Post.findById(req.body.id);
     if (!post) return res.status(404).send("Invalid Post ID");
 
     post.remove();
@@ -68,4 +68,16 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
+// delete all posts
+router.delete("/delete/all", async (_, res) => {
+  try {
+    const posts = await Post.find();
+    for (const post of posts) {
+      post.remove();
+    }
+    res.send(posts);
+  } catch (error) {
+    res.send(error);
+  }
+});
 export { router as PostRouter };

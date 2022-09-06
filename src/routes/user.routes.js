@@ -61,4 +61,17 @@ router.delete("/delete", async (req, res) => {
   }
 });
 
+// delete all users
+router.delete("/all", async (_, res) => {
+  try {
+    const users = await User.find();
+    for (const user of users) {
+      user.remove();
+    }
+    res.send(users);
+  } catch (error) {
+    res.send(error);
+  }
+});
+
 export { router as UserRouter };
