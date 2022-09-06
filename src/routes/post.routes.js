@@ -1,13 +1,13 @@
 import express from "express";
 import { Post } from "../models/post.model";
-import { User } from "../models/user.model";
+import { authGuard } from "../utils/auth.utils";
 const router = express.Router();
 
 // create Post
-router.post("/", async (req, res) => {
+router.post("/", authGuard, async (req, res) => {
   try {
     const post = new Post(req.body);
-    const author = await User.findById(req.body.author);
+    const author = req.user;
     if (!author) return res.status(400).send("Invalid author ID");
     post.author = author;
     await post.save();

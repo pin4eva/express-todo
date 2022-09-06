@@ -10,6 +10,7 @@ const app = express();
 
 // Add our middlewares
 app.use(express.json());
+
 app.get("/", (_, res) => res.send("Welcome home"));
 app.use("/todo", TodoRouter);
 app.use("/post", PostRouter);
