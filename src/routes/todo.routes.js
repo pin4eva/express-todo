@@ -12,9 +12,18 @@ router.get("/", async (req, res) => {
     res.json(error);
   }
 });
+router.get("/completed", async (req, res) => {
+  try {
+    const todo = await Todo.find({ completed: true });
+
+    res.send(todo);
+  } catch (error) {
+    res.json(error);
+  }
+});
 
 // get todo by id
-router.get("/:id", async (req, res) => {
+router.get("/single/:id", async (req, res) => {
   try {
     const todo = await Todo.findById(req.params.id);
     if (!todo) return res.send("Todo not found");

@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { User } from "../models/user.model";
+import { Post } from "../models/post.model";
 
 const router = Router();
 
@@ -14,9 +15,11 @@ router.get("/", async (_, res) => {
 });
 
 // get a users
-router.get("/:id", async (req, res) => {
+router.get("/single/:id", async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
+    const posts = await Post.find({ author: user.id });
+    user.posts = posts;
     if (!user) return res.status(404).send("User not found");
     res.send(user);
   } catch (error) {
